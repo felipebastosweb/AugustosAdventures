@@ -22,6 +22,19 @@ ENERGY_BAR_WIDTH = 140
 ITEM_BOX_SIZE = 80
 UI_FONT = "../Graphics/Font/Joystix.ttf"
 UI_FONT_SIZE = 18
+# UI JoyPad
+JOYPAD_BUTTON_SIZE = 128
+# TODO: BUG - refinar a posição do JoyPad para ficar no canto direito da tela
+JOYPAD_BUTTON_CENTER = (70, SCREEN_HEIGHT - 192)
+JOYPAD_BUTTON_REGIONS = [
+    [(0, 0), (0, 1), (0, 2)],
+    [(1, 0), None, (1, 2)],
+    [(2, 0), (2, 1), (2, 2)]
+]
+# JoyPad Cores
+JOYPAD_COLOR_WHITE = (255, 255, 255)
+JOYPAD_COLOR_GRAY = (200, 200, 200)
+
 
 # General Colors
 WATER_COLOR = "#71ddee"

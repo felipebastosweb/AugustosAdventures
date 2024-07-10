@@ -16,12 +16,14 @@ class Game:
         # General setup
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
-        pygame .display.set_caption("Zelda with Python")
+        pygame.display.set_caption("Augusto's Adventures")
         pygame_icon = pygame.image.load("../Graphics/Test/Player.png")
         pygame.display.set_icon(pygame_icon)
         self.clock = pygame.time.Clock()
 
-        self.level = Level()
+        # TODO: acrescentar a lista de níveis do jogo
+        # level activated
+        self.level_activated = Level()
 
         # Music
         main_sound = pygame.mixer.Sound("../Audio/Main.ogg")
@@ -36,10 +38,12 @@ class Game:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
-                        self.level.toggle_menu()
+                        self.level_activated.toggle_menu()
             
+            # TODO: acrescentar o mecanismo de mudança de Level já criado
+
             self.screen.fill(WATER_COLOR)
-            self.level.run()
+            self.level_activated.run()
             pygame.display.update()
             self.clock.tick(FPS)
 

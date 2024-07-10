@@ -39,6 +39,7 @@ class Level:
 
         # User Interface
         self.ui = UI()
+
         self.upgrade = Upgrade(self.player)
 
         # Particles
@@ -146,15 +147,12 @@ class Level:
             self.animation_player.create_particles(attack_type, self.player.rect.center, [self.visible_sprites])
 
     def trigger_death_particles(self, pos, particle_type):
-
         self.animation_player.create_particles(particle_type, pos, self.visible_sprites)
 
     def add_exp(self, amount):
-
         self.player.exp += amount
 
     def toggle_menu(self):
-
         self.game_paused = not self.game_paused
 
     def run(self):
