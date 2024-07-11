@@ -25,7 +25,7 @@ UI_FONT_SIZE = 18
 # UI JoyPad
 JOYPAD_BUTTON_SIZE = 128
 # TODO: BUG - refinar a posição do JoyPad para ficar no canto direito da tela
-JOYPAD_BUTTON_CENTER = (70, SCREEN_HEIGHT - 192)
+JOYPAD_BUTTON_CENTER = (70, HEIGTH - 192)
 JOYPAD_BUTTON_REGIONS = [
     [(0, 0), (0, 1), (0, 2)],
     [(1, 0), None, (1, 2)],

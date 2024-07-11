@@ -41,18 +41,51 @@ class SelectionBox:
         return self.bg_rect
 
 class WeaponOverlay:
-    def __init__(self, display_surface, weapon_graphics, weapon_index, has_switched):
+    def __init__(self, display_surface, weapon_data, weapon_index, has_switched):
         self.display_surface = display_surface
-        self.weapon_graphics = weapon_graphics
+        self.weapon_graphics = []
+        self.init_weapon_graphics(weapon_data)
         self.weapon_index = weapon_index
         self.has_switched = has_switched
-
+    # init list of images
+    def init_weapon_graphics(self, weapon_data):
+        for weapon in weapon_data.values():
+            path = weapon["graphic"]
+            weapon = pygame.image.load(path).convert_alpha()
+            self.weapon_graphics.append(weapon)
+    def update(self, weapon_index, has_switched):
+        self.weapon_index = weapon_index
+        self.has_switched = has_switched
+    # draw weapon
     def show(self):
         bg_rect = SelectionBox(self.display_surface, 10, 630, self.has_switched).show()
         weapon_surf = self.weapon_graphics[self.weapon_index]
         weapon_rect = weapon_surf.get_rect(center=bg_rect.center)
-
         self.display_surface.blit(weapon_surf, weapon_rect)
+
+
+class MagicOverlay:
+    def __init__(self, display_surface, magic_data, magic_index, has_switched):
+        self.display_surface = display_surface
+        self.magic_graphics = []
+        self.init_magic_graphics(magic_data)
+        self.magic_index = magic_index
+        self.has_switched = has_switched
+    # init list of images
+    def init_magic_graphics(self, magic_data):
+        for magic in magic_data.values():
+            magic = pygame.image.load(magic["graphic"]).convert_alpha()
+            self.magic_graphics.append(magic)
+    def update(self, magic_index, has_switched):
+        self.magic_index = magic_index
+        self.has_switched = has_switched
+    # draw magic
+    def show(self):
+        bg_rect = SelectionBox(self.display_surface, 100, 630, self.has_switched).show()
+        magic_surf = self.magic_graphics[self.magic_index]
+        magic_rect = magic_surf.get_rect(center=bg_rect.center)
+        self.display_surface.blit(magic_surf, magic_rect)
+
 
 class ExperienceDisplay:
     def __init__(self, display_surface, font):
@@ -68,6 +101,7 @@ class ExperienceDisplay:
         pygame.draw.rect(self.display_surface, UI_BG_COLOR, retangulo_texto.inflate(20, 20))
         self.display_surface.blit(texto_surf, retangulo_texto)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, retangulo_texto.inflate(20, 20), 3)
+
 
 """ Prototipando um JoyPad para adaptar o jogo ao dispositivo mobile """
 class JoyPad:
@@ -104,19 +138,22 @@ class UI:
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
         
         # Bar Setup
-        self.health_bar = Bar(display_surface, font, pygame.Rect(10, 10, HEALTH_BAR_WIDTH, BAR_HEIGHT), HEALTH_COLOR)
-        self.energy_bar = Bar(display_surface, font, pygame.Rect(10, 34, ENERGY_BAR_WIDTH, BAR_HEIGHT), ENERGY_COLOR)
+        self.health_bar = Bar(self.display_surface, self.font, pygame.Rect(10, 10, HEALTH_BAR_WIDTH, BAR_HEIGHT), HEALTH_COLOR)
+        self.energy_bar = Bar(self.display_surface, self.font, pygame.Rect(10, 34, ENERGY_BAR_WIDTH, BAR_HEIGHT), ENERGY_COLOR)
 
         # Selection Boxes
-        self.weapon_box = SelectionBox(display_surface, 10, 630, False)
-        self.magic_box = SelectionBox(display_surface, 100, 630, False)
+        self.weapon_box = SelectionBox(self.display_surface, 10, 630, False)
+        self.magic_box = SelectionBox(self.display_surface, 100, 630, False)
 
         # Exibição da experiência do Player
-        self.exp_display = ExperienceDisplay(display_surface, font)
+        self.exp_display = ExperienceDisplay(self.display_surface, self.font)
 
         # Carrega gráficos de armas e magias (substitua com seus dados reais)
-        self.weapon_graphics = []  # Carregue os gráficos das armas aqui
-        self.magic_graphics = []  # Carregue os gráficos das magias aqui
+        self.weapon_overlay = WeaponOverlay(self.display_surface, weapon_data, 0, False)
+        self.magic_overlay = MagicOverlay(self.display_surface, magic_data, 0, False)
+
+        #self.weapon_graphics = []  # Carregue os gráficos das armas aqui
+        #self.magic_graphics = []  # Carregue os gráficos das magias aqui
 
         """
         # Bar Setup
@@ -155,7 +192,6 @@ class UI:
     
         pygame.draw.rect(self.display_surface, color, current_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
-    """
 
     def show_exp(self, exp):
         text_surf = self.font.render(str(int(exp)), False, TEXT_COLOR)
@@ -189,7 +225,8 @@ class UI:
         magic_rect = magic_surf.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(magic_surf, magic_rect)
-    
+    """
+
     def show_joypad(self):
         self.joypad.draw(self.display_surface)
 
@@ -206,11 +243,14 @@ class UI:
         self.exp_display.show(player.exp)
 
         # Mostra as caixas de seleção
-        WeaponOverlay(self.display_surface, self.weapon_graphics, player.weapon_index, not player.can_switch_weapon).show()
-        MagicOverlay(self.display_surface, self.magic_graphics, player.magic_index, not player.can_switch_magic).show()
+        self.weapon_overlay.update(player.weapon_index, player.can_switch_weapon)
+        self.weapon_overlay.show()
+        self.magic_overlay.update(player.magic_index, player.can_switch_magic)
+        self.magic_overlay.show()
 
         # show joypad in game UI
         self.show_joypad()
-
+        """
         self.weapon_overlay(player.weapon_index, not player.can_switch_weapon)
         self.magic_overlay(player.magic_index, not player.can_switch_magic)
+        """
