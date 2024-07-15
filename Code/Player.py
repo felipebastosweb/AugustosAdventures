@@ -13,6 +13,8 @@ class Player(Entity):
         self.image = pygame.image.load("../Graphics/Test/Player.png").convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-6, HITBOX_OFFSET["player"])
+        # Status of Player
+        self.dead = False
 
         # Graphics Setup
         self.import_player_assets()
@@ -203,7 +205,11 @@ class Player(Entity):
 
     def player_death(self):
         if self.health <= 0:
-            sys.exit()
+            # TODO: mudar status do jogador para morto, para acionar a tela de Game Over
+            self.dead = True
+            #self.health = 0
+            #self.stats["health"] = self.health
+            #sys.exit()
 
     def get_cost_by_index(self, index):
         return list(self.upgrade_cost.values())[index]

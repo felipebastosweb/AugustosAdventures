@@ -10,6 +10,7 @@ from UI import UI
 from Enemy import Enemy
 from Particles import AnimationPlayer
 from Magic import MagicPlayer
+from GameOver import GameOver
 from Upgrade import Upgrade
 import os
 
@@ -40,6 +41,9 @@ class Level:
         # User Interface
         self.ui = UI()
 
+        # Game Over
+        self.game_over = GameOver(self.player)
+        # Upgrade Player Resources
         self.upgrade = Upgrade(self.player)
 
         # Particles
@@ -158,9 +162,11 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.ui.display(self.player)
-
+        
         if self.game_paused:
             self.upgrade.display()
+        elif self.player.dead:
+            self.game_over.display()
         else:
             self.visible_sprites.update()
             self.visible_sprites.enemy_update(self.player)

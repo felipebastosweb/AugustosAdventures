@@ -32,8 +32,14 @@ JOYPAD_BUTTON_REGIONS = [
     [(2, 0), (2, 1), (2, 2)]
 ]
 # JoyPad Cores
-JOYPAD_COLOR_WHITE = (255, 255, 255)
+#JOYPAD_COLOR_WHITE = (255, 255, 255)
+JOYPAD_COLOR_WHITE = (5, 5, 5)
 JOYPAD_COLOR_GRAY = (200, 200, 200)
+
+
+# Cursor
+cursor_image = "../Graphics/Cursor/Cursor.png"
+cursor_offset = (16, 16)
 
 
 # General Colors
