@@ -96,35 +96,34 @@ class GameOver:
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE * 2)
         self.font_buttons = pygame.font.Font(UI_FONT, UI_FONT_SIZE - 4)
-        self.title = "Game Over"
+        self.title = self.font.render("Game Over", True, (255, 255, 255))
         self.player = player
-        # button's engine
-        self.button_save = Button("Save", self.font_buttons, (255, 255, 255), (100, 100, 100))
-        self.button_close = Button("Close", self.font_buttons, (255, 255, 255), (100, 100, 100))
-        self.buttons = [self.button_save, self.button_close]
+        self.buttons = [Button("Save", self.font_buttons, (255, 255, 255), (100, 100, 100)),
+                        Button("Close", self.font_buttons, (255, 255, 255), (100, 100, 100))]
         self.selected_button = 0
-        # mouse engine
         self.cursor = MouseCursor()
         self.input = GameOverInput()
 
     def handle_input(self):
         self.input.handle_input()
-    
+
     def handle_touch(self):
         self.input.handle_touch()
 
     def display(self):
         self.handle_input()
-        # Display title
-        title_text = self.font.render(self.title, True, (255, 255, 255))
-        title_rect = title_text.get_rect(center=(self.display_surface.get_width() // 2, 50))
-        self.display_surface.blit(title_text, title_rect)
+        self.display_title()
+        self.display_buttons()
+        self.display_cursor()
+        self.handle_touch()
 
-        # Display buttons
+    def display_title(self):
+        title_rect = self.title.get_rect(center=(self.display_surface.get_width() // 2, 50))
+        self.display_surface.blit(self.title, title_rect)
+
+    def display_buttons(self):
         button_spacing = 20
-        sum_buttons_width = sum(button.get_width() for button in self.buttons)
-        total_buttons = (len(self.buttons) - 1)
-        total_width = sum_buttons_width + total_buttons * button_spacing
+        total_width = sum(button.get_width() for button in self.buttons) + (len(self.buttons) - 1) * button_spacing
         x_start = (self.display_surface.get_width() - total_width) // 2
         y = 100
         for i, button in enumerate(self.buttons):
@@ -133,9 +132,7 @@ class GameOver:
             if button_rect.collidepoint(pygame.mouse.get_pos()):
                 # Handle mouse hover
                 pass
-        # Exiba o cursor do mouse
+
+    def display_cursor(self):
         self.cursor.update()
         self.cursor.draw(self.display_surface)
-        # touch engine handle
-        self.handle_touch()
-
